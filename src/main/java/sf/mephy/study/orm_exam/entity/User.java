@@ -3,6 +3,9 @@ package sf.mephy.study.orm_exam.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -24,4 +27,7 @@ public class User {
     public enum Role {
         STUDENT, TEACHER, ADMIN
     }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Enrollment> enrollments = new ArrayList<>();
 }
