@@ -3,13 +3,13 @@ package sf.mephy.study.orm_exam.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sf.mephy.study.orm_exam.entity.User;
 import sf.mephy.study.orm_exam.entity.Course;
 import sf.mephy.study.orm_exam.entity.Enrollment;
+import sf.mephy.study.orm_exam.entity.User;
+import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
+import sf.mephy.study.orm_exam.repository.CourseRepository;
 import sf.mephy.study.orm_exam.repository.EnrollmentRepository;
 import sf.mephy.study.orm_exam.repository.UserRepository;
-import sf.mephy.study.orm_exam.repository.CourseRepository;
-
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,16 +27,16 @@ public class EnrollmentService {
 
     public Enrollment getEnrollmentById(Long id) {
         return enrollmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Enrollment with id " + id + " not found"));
     }
 
     @Transactional
     public Enrollment enrollUserToCourse(Long userId, Long courseId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
 
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Course with id " + courseId + " not found"));
 
         Enrollment enrollment = new Enrollment();
         enrollment.setUser(user);

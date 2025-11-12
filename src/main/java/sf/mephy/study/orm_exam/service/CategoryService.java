@@ -3,6 +3,7 @@ package sf.mephy.study.orm_exam.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sf.mephy.study.orm_exam.entity.Category;
+import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
 import sf.mephy.study.orm_exam.repository.CategoryRepository;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class CategoryService {
 
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " not found"));
     }
 
     public Category createCategory(Category category) {

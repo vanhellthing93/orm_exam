@@ -3,6 +3,7 @@ package sf.mephy.study.orm_exam.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sf.mephy.study.orm_exam.entity.Course;
+import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
 import sf.mephy.study.orm_exam.repository.CourseRepository;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class CourseService {
 
     public Course getCourseById(Long id) {
         return courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Course with id " + id + " not found"));
     }
 
     public Course createCourse(Course course) {

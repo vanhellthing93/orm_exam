@@ -3,6 +3,7 @@ package sf.mephy.study.orm_exam.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sf.mephy.study.orm_exam.entity.User;
+import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
 import sf.mephy.study.orm_exam.repository.UserRepository;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
     }
 
     public User createUser(User user) {
