@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import sf.mephy.study.orm_exam.entity.Assignment;
 import sf.mephy.study.orm_exam.entity.Submission;
 import sf.mephy.study.orm_exam.entity.User;
+import sf.mephy.study.orm_exam.exception.DuplicateEntityException;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
 import sf.mephy.study.orm_exam.repository.AssignmentRepository;
 import sf.mephy.study.orm_exam.repository.SubmissionRepository;
@@ -39,6 +40,11 @@ public class SubmissionService {
 
         User student = userRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + studentId + " not found"));
+
+        boolean alreadySubmitted = submissionRepository.existsByStudentIdAndAssignmentId(studentId, assignmentId);
+        if (alreadySubmitted) {
+            throw new DuplicateEntityException("Student has already submitted a solution for this assignment.");
+        }
 
         Submission submission = new Submission();
         submission.setAssignment(assignment);

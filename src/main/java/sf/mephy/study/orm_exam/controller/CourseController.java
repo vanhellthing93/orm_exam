@@ -5,19 +5,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.CourseRequest;
 import sf.mephy.study.orm_exam.dto.response.CourseResponse;
+import sf.mephy.study.orm_exam.dto.response.UserResponse;
 import sf.mephy.study.orm_exam.entity.Course;
+import sf.mephy.study.orm_exam.entity.User;
 import sf.mephy.study.orm_exam.mapper.CourseMapper;
+import sf.mephy.study.orm_exam.mapper.UserMapper;
 import sf.mephy.study.orm_exam.service.CourseService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/courses")
+@RequestMapping("/api/v1/courses")
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
     private final CourseMapper courseMapper;
+    private final UserMapper userMapper;
 
     @GetMapping
     public List<CourseResponse> getAllCourses() {
@@ -51,5 +55,19 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/user/{userId}")
+    public List<CourseResponse> getCoursesByUserId(@PathVariable Long userId) {
+        List<Course> courses = courseService.getCoursesByUserId(userId);
+        return courses.stream()
+                .map(courseMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 
+    @GetMapping("/{courseId}/students")
+    public List<UserResponse> getStudentsByCourseId(@PathVariable Long courseId) {
+        List<User> students = courseService.getStudentsByCourseId(courseId);
+        return students.stream()
+                .map(userMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 }
