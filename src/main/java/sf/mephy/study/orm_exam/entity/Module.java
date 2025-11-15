@@ -25,4 +25,7 @@ public class Module {
 
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Lesson> lessons = new ArrayList<>();
+
+    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Quiz> quizzes = new ArrayList<>();
 }

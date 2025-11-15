@@ -13,7 +13,7 @@ import sf.mephy.study.orm_exam.entity.User;
 public interface SubmissionMapper {
 
     @Mapping(target = "assignment", source = "assignmentId", qualifiedByName = "assignmentIdToAssignment")
-    @Mapping(target = "student", source = "studentId", qualifiedByName = "studentIdToUser")
+    @Mapping(target = "student", source = "studentId", qualifiedByName = "submissionStudentIdToUser")
     Submission toEntity(SubmissionRequest request);
 
     @Mapping(target = "assignment", source = "assignment", qualifiedByName = "assignmentToAssignmentInfo")
@@ -41,8 +41,8 @@ public interface SubmissionMapper {
         return assignment;
     }
 
-    @Named("studentIdToUser")
-    default User studentIdToUser(Long studentId) {
+    @Named("submissionStudentIdToUser")
+    default User submissionStudentIdToUser(Long studentId) {
         if (studentId == null) {
             return null;
         }

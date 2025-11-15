@@ -21,4 +21,14 @@ public interface UserMapper {
         userInfo.setName(user.getName());
         return userInfo;
     }
+
+    @Named("studentIdToUser")
+    default User studentIdToUser(Long studentId) {
+        if (studentId == null) {
+            return null;
+        }
+        User user = new User();
+        user.setId(studentId);
+        return user;
+    }
 }
