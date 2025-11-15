@@ -47,4 +47,21 @@ public class SubmissionController {
         Submission submission = submissionService.submitAssignment(assignmentId, studentId, contentRequest.getContent());
         return submissionMapper.toResponse(submission);
     }
+
+    @GetMapping("/assignment/{assignmentId}")
+    public List<SubmissionResponse> getSubmissionsByAssignmentId(@PathVariable Long assignmentId) {
+        List<Submission> submissions = submissionService.getSubmissionsByAssignmentId(assignmentId);
+        return submissions.stream()
+                .map(submissionMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/student/{studentId}")
+    public List<SubmissionResponse> getSubmissionsByStudentId(@PathVariable Long studentId) {
+        List<Submission> submissions = submissionService.getSubmissionsByStudentId(studentId);
+        return submissions.stream()
+                .map(submissionMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
 }

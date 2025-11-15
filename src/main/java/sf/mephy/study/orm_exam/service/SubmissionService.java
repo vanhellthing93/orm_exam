@@ -30,6 +30,14 @@ public class SubmissionService {
                 .orElseThrow(() -> new EntityNotFoundException("Submission with id " + id + " not found"));
     }
 
+    public List<Submission> getSubmissionsByAssignmentId(Long assignmentId) {
+        return submissionRepository.findByAssignmentId(assignmentId);
+    }
+
+    public List<Submission> getSubmissionsByStudentId(Long studentId) {
+        return submissionRepository.findByStudentId(studentId);
+    }
+
     public Submission createSubmission(Submission submission) {
         return submissionRepository.save(submission);
     }

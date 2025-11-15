@@ -46,4 +46,28 @@ public class QuizSubmissionController {
         QuizSubmission quizSubmission = quizSubmissionService.submitQuiz(quizId, studentId, score);
         return quizSubmissionMapper.toResponse(quizSubmission);
     }
+
+    @GetMapping("/student/{studentId}")
+    public List<QuizSubmissionResponse> getQuizSubmissionsByStudentId(@PathVariable Long studentId) {
+        List<QuizSubmission> quizSubmissions = quizSubmissionService.getQuizSubmissionsByStudentId(studentId);
+        return quizSubmissions.stream()
+                .map(quizSubmissionMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/course/{courseId}")
+    public List<QuizSubmissionResponse> getQuizSubmissionsByCourseId(@PathVariable Long courseId) {
+        List<QuizSubmission> quizSubmissions = quizSubmissionService.getQuizSubmissionsByCourseId(courseId);
+        return quizSubmissions.stream()
+                .map(quizSubmissionMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/module/{moduleId}")
+    public List<QuizSubmissionResponse> getQuizSubmissionsByModuleId(@PathVariable Long moduleId) {
+        List<QuizSubmission> quizSubmissions = quizSubmissionService.getQuizSubmissionsByModuleId(moduleId);
+        return quizSubmissions.stream()
+                .map(quizSubmissionMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 }

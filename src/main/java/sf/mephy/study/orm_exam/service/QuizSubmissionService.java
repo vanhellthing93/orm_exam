@@ -12,6 +12,7 @@ import sf.mephy.study.orm_exam.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,22 @@ public class QuizSubmissionService {
     public QuizSubmission getQuizSubmissionById(Long id) {
         return quizSubmissionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("QuizSubmission with id " + id + " not found"));
+    }
+
+    public List<QuizSubmission> getQuizSubmissionsByStudentId(Long studentId) {
+        return quizSubmissionRepository.findByStudentId(studentId);
+    }
+
+    public List<QuizSubmission> getQuizSubmissionsByCourseId(Long courseId) {
+        List<Quiz> quizzes = quizRepository.findByModule_CourseId(courseId);
+        List<Long> quizIds = quizzes.stream().map(Quiz::getId).collect(Collectors.toList());
+        return quizSubmissionRepository.findByQuizIdIn(quizIds);
+    }
+
+    public List<QuizSubmission> getQuizSubmissionsByModuleId(Long moduleId) {
+        List<Quiz> quizzes = quizRepository.findByModuleId(moduleId);
+        List<Long> quizIds = quizzes.stream().map(Quiz::getId).collect(Collectors.toList());
+        return quizSubmissionRepository.findByQuizIdIn(quizIds);
     }
 
     public QuizSubmission createQuizSubmission(QuizSubmission quizSubmission) {
