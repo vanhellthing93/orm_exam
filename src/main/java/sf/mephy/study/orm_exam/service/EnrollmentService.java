@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sf.mephy.study.orm_exam.entity.Course;
 import sf.mephy.study.orm_exam.entity.Enrollment;
 import sf.mephy.study.orm_exam.entity.User;
+import sf.mephy.study.orm_exam.exception.DuplicateEntityException;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
 import sf.mephy.study.orm_exam.repository.CourseRepository;
 import sf.mephy.study.orm_exam.repository.EnrollmentRepository;
@@ -38,6 +39,12 @@ public class EnrollmentService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new EntityNotFoundException("Course with id " + courseId + " not found"));
 
+        // Проверка, что пользователь ещё не записан на этот курс
+        boolean alreadyEnrolled = enrollmentRepository.existsByUserIdAndCourseId(userId, courseId);
+        if (alreadyEnrolled) {
+            throw new DuplicateEntityException("User is already enrolled in this course.");
+        }
+
         Enrollment enrollment = new Enrollment();
         enrollment.setUser(user);
         enrollment.setCourse(course);
@@ -45,5 +52,13 @@ public class EnrollmentService {
         enrollment.setStatus(Enrollment.EnrollmentStatus.ACTIVE);
 
         return enrollmentRepository.save(enrollment);
+    }
+
+    @Transactional
+    public void unenrollUserFromCourse(Long userId, Long courseId) {
+        Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(userId, courseId)
+                .orElseThrow(() -> new EntityNotFoundException("Enrollment not found for user " + userId + " and course " + courseId));
+
+        enrollmentRepository.delete(enrollment);
     }
 }

@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.response.EnrollmentResponse;
 import sf.mephy.study.orm_exam.entity.Enrollment;
@@ -36,5 +37,13 @@ public class EnrollmentController {
             @RequestParam Long courseId) {
         Enrollment enrollment = enrollmentService.enrollUserToCourse(userId, courseId);
         return enrollmentMapper.toResponse(enrollment);
+    }
+
+    @PostMapping("/unenroll")
+    public ResponseEntity<Void> unenrollUserFromCourse(
+            @RequestParam Long userId,
+            @RequestParam Long courseId) {
+        enrollmentService.unenrollUserFromCourse(userId, courseId);
+        return ResponseEntity.noContent().build();
     }
 }
