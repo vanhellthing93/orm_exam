@@ -18,6 +18,3 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   liquibase:
     enabled: true
-  h2:
-    console:
-      enabled: false

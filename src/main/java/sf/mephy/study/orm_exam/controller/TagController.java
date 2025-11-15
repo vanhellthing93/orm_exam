@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.TagRequest;
 import sf.mephy.study.orm_exam.dto.response.TagResponse;
@@ -36,5 +37,17 @@ public class TagController {
         Tag tag = tagMapper.toEntity(tagRequest);
         Tag createdTag = tagService.createTag(tag);
         return tagMapper.toResponse(createdTag);
+    }
+
+    @PutMapping("/{id}")
+    public TagResponse updateTag(@PathVariable Long id, @RequestBody TagRequest tagRequest) {
+        Tag updatedTag = tagService.updateTag(id, tagRequest);
+        return tagMapper.toResponse(updatedTag);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
+        tagService.deleteTag(id);
+        return ResponseEntity.noContent().build();
     }
 }

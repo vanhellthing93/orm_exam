@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.AssignmentRequest;
 import sf.mephy.study.orm_exam.dto.response.AssignmentResponse;
@@ -37,4 +38,17 @@ public class AssignmentController {
         Assignment createdAssignment = assignmentService.createAssignment(assignment);
         return assignmentMapper.toResponse(createdAssignment);
     }
+
+    @PutMapping("/{id}")
+    public AssignmentResponse updateAssignment(@PathVariable Long id, @RequestBody AssignmentRequest assignmentRequest) {
+        Assignment updatedAssignment = assignmentService.updateAssignment(id, assignmentRequest);
+        return assignmentMapper.toResponse(updatedAssignment);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAssignment(@PathVariable Long id) {
+        assignmentService.deleteAssignment(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

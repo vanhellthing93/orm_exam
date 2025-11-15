@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.UserRequest;
 import sf.mephy.study.orm_exam.dto.response.UserResponse;
@@ -36,5 +37,16 @@ public class UserController {
         User user = userMapper.toEntity(userRequest);
         User createdUser = userService.createUser(user);
         return userMapper.toResponse(createdUser);
+    }
+    @PutMapping("/{id}")
+    public UserResponse updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+        User updatedUser = userService.updateUser(id, userRequest);
+        return userMapper.toResponse(updatedUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

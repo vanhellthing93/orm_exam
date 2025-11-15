@@ -3,6 +3,7 @@ package sf.mephy.study.orm_exam.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import sf.mephy.study.orm_exam.dto.request.CategoryRequest;
 import sf.mephy.study.orm_exam.entity.Category;
 import sf.mephy.study.orm_exam.exception.DuplicateEntityException;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
@@ -31,4 +32,22 @@ public class CategoryService {
             throw new DuplicateEntityException("Category with this name already exists.");
         }
     }
+
+    public Category updateCategory(Long id, CategoryRequest categoryRequest) {
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " not found"));
+
+        if (categoryRequest.getName() != null) {
+            existingCategory.setName(categoryRequest.getName());
+        }
+
+        return categoryRepository.save(existingCategory);
+    }
+
+    public void deleteCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " not found"));
+        categoryRepository.delete(category);
+    }
+
 }

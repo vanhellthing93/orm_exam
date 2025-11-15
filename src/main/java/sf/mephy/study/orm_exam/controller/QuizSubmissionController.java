@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.QuizSubmissionRequest;
 import sf.mephy.study.orm_exam.dto.response.QuizSubmissionResponse;
@@ -69,5 +70,17 @@ public class QuizSubmissionController {
         return quizSubmissions.stream()
                 .map(quizSubmissionMapper::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    @PutMapping("/{id}")
+    public QuizSubmissionResponse updateQuizSubmission(@PathVariable Long id, @RequestBody QuizSubmissionRequest quizSubmissionRequest) {
+        QuizSubmission updatedSubmission = quizSubmissionService.updateQuizSubmission(id, quizSubmissionRequest);
+        return quizSubmissionMapper.toResponse(updatedSubmission);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteQuizSubmission(@PathVariable Long id) {
+        quizSubmissionService.deleteQuizSubmission(id);
+        return ResponseEntity.noContent().build();
     }
 }

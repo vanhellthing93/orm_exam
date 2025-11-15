@@ -2,6 +2,7 @@ package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sf.mephy.study.orm_exam.dto.request.CourseReviewRequest;
 import sf.mephy.study.orm_exam.entity.Course;
 import sf.mephy.study.orm_exam.entity.CourseReview;
 import sf.mephy.study.orm_exam.entity.User;
@@ -48,5 +49,38 @@ public class CourseReviewService {
         courseReview.setStudent(student);
 
         return courseReviewRepository.save(courseReview);
+    }
+
+    public CourseReview updateCourseReview(Long id, CourseReviewRequest courseReviewRequest) {
+        CourseReview existingReview = courseReviewRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("CourseReview with id " + id + " not found"));
+
+        if (courseReviewRequest.getRating() != null) {
+            existingReview.setRating(courseReviewRequest.getRating());
+        }
+
+        if (courseReviewRequest.getComment() != null) {
+            existingReview.setComment(courseReviewRequest.getComment());
+        }
+
+        if (courseReviewRequest.getStudentId() != null) {
+            User student = userRepository.findById(courseReviewRequest.getStudentId())
+                    .orElseThrow(() -> new EntityNotFoundException("User with id " + courseReviewRequest.getStudentId() + " not found"));
+            existingReview.setStudent(student);
+        }
+
+        if (courseReviewRequest.getCourseId() != null) {
+            Course course = courseRepository.findById(courseReviewRequest.getCourseId())
+                    .orElseThrow(() -> new EntityNotFoundException("Course with id " + courseReviewRequest.getCourseId() + " not found"));
+            existingReview.setCourse(course);
+        }
+
+        return courseReviewRepository.save(existingReview);
+    }
+
+    public void deleteCourseReview(Long id) {
+        CourseReview review = courseReviewRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("CourseReview with id " + id + " not found"));
+        courseReviewRepository.delete(review);
     }
 }

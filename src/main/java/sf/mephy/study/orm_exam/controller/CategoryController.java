@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.CategoryRequest;
 import sf.mephy.study.orm_exam.dto.response.CategoryResponse;
@@ -36,5 +37,17 @@ public class CategoryController {
         Category category = categoryMapper.toEntity(categoryRequest);
         Category createdCategory = categoryService.createCategory(category);
         return categoryMapper.toResponse(createdCategory);
+    }
+
+    @PutMapping("/{id}")
+    public CategoryResponse updateCategory(@PathVariable Long id, @RequestBody CategoryRequest categoryRequest) {
+        Category updatedCategory = categoryService.updateCategory(id, categoryRequest);
+        return categoryMapper.toResponse(updatedCategory);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build();
     }
 }

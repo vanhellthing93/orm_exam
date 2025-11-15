@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.CourseReviewRequest;
 import sf.mephy.study.orm_exam.dto.response.CourseReviewResponse;
@@ -46,5 +47,17 @@ public class CourseReviewController {
         CourseReview courseReview = courseReviewMapper.toEntity(courseReviewRequest);
         CourseReview createdCourseReview = courseReviewService.createCourseReview(courseId, studentId, courseReview);
         return courseReviewMapper.toResponse(createdCourseReview);
+    }
+
+    @PutMapping("/{id}")
+    public CourseReviewResponse updateCourseReview(@PathVariable Long id, @RequestBody CourseReviewRequest courseReviewRequest) {
+        CourseReview updatedReview = courseReviewService.updateCourseReview(id, courseReviewRequest);
+        return courseReviewMapper.toResponse(updatedReview);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCourseReview(@PathVariable Long id) {
+        courseReviewService.deleteCourseReview(id);
+        return ResponseEntity.noContent().build();
     }
 }

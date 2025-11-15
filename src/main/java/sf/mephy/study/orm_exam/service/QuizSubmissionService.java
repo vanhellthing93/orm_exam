@@ -2,6 +2,7 @@ package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sf.mephy.study.orm_exam.dto.request.QuizSubmissionRequest;
 import sf.mephy.study.orm_exam.entity.Quiz;
 import sf.mephy.study.orm_exam.entity.QuizSubmission;
 import sf.mephy.study.orm_exam.entity.User;
@@ -64,5 +65,34 @@ public class QuizSubmissionService {
         quizSubmission.setTakenAt(LocalDateTime.now());
 
         return quizSubmissionRepository.save(quizSubmission);
+    }
+
+    public QuizSubmission updateQuizSubmission(Long id, QuizSubmissionRequest quizSubmissionRequest) {
+        QuizSubmission existingSubmission = quizSubmissionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("QuizSubmission with id " + id + " not found"));
+
+        if (quizSubmissionRequest.getScore() != null) {
+            existingSubmission.setScore(quizSubmissionRequest.getScore());
+        }
+
+        if (quizSubmissionRequest.getQuizId() != null) {
+            Quiz quiz = quizRepository.findById(quizSubmissionRequest.getQuizId())
+                    .orElseThrow(() -> new EntityNotFoundException("Quiz with id " + quizSubmissionRequest.getQuizId() + " not found"));
+            existingSubmission.setQuiz(quiz);
+        }
+
+        if (quizSubmissionRequest.getStudentId() != null) {
+            User student = userRepository.findById(quizSubmissionRequest.getStudentId())
+                    .orElseThrow(() -> new EntityNotFoundException("User with id " + quizSubmissionRequest.getStudentId() + " not found"));
+            existingSubmission.setStudent(student);
+        }
+
+        return quizSubmissionRepository.save(existingSubmission);
+    }
+
+    public void deleteQuizSubmission(Long id) {
+        QuizSubmission quizSubmission = quizSubmissionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("QuizSubmission with id " + id + " not found"));
+        quizSubmissionRepository.delete(quizSubmission);
     }
 }

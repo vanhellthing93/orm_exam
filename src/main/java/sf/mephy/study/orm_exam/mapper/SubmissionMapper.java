@@ -11,7 +11,6 @@ import sf.mephy.study.orm_exam.entity.User;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {AssignmentMapper.class, UserMapper.class})
 public interface SubmissionMapper {
-
     @Mapping(target = "assignment", source = "assignmentId", qualifiedByName = "assignmentIdToAssignment")
     @Mapping(target = "student", source = "studentId", qualifiedByName = "submissionStudentIdToUser")
     Submission toEntity(SubmissionRequest request);

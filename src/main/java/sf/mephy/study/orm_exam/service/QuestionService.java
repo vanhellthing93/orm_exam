@@ -2,6 +2,7 @@ package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sf.mephy.study.orm_exam.dto.request.QuestionRequest;
 import sf.mephy.study.orm_exam.entity.Question;
 import sf.mephy.study.orm_exam.entity.Quiz;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
@@ -34,5 +35,32 @@ public class QuestionService {
         question.setQuiz(quiz);
 
         return questionRepository.save(question);
+    }
+
+    public Question updateQuestion(Long id, QuestionRequest questionRequest) {
+        Question existingQuestion = questionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Question with id " + id + " not found"));
+
+        if (questionRequest.getText() != null) {
+            existingQuestion.setText(questionRequest.getText());
+        }
+
+        if (questionRequest.getType() != null) {
+            existingQuestion.setType(Question.QuestionType.valueOf(questionRequest.getType()));
+        }
+
+        if (questionRequest.getQuizId() != null) {
+            Quiz quiz = quizRepository.findById(questionRequest.getQuizId())
+                    .orElseThrow(() -> new EntityNotFoundException("Quiz with id " + questionRequest.getQuizId() + " not found"));
+            existingQuestion.setQuiz(quiz);
+        }
+
+        return questionRepository.save(existingQuestion);
+    }
+
+    public void deleteQuestion(Long id) {
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Question with id " + id + " not found"));
+        questionRepository.delete(question);
     }
 }

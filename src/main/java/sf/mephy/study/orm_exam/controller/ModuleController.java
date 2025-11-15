@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.ModuleRequest;
 import sf.mephy.study.orm_exam.dto.response.ModuleResponse;
@@ -36,5 +37,17 @@ public class ModuleController {
         Module module = moduleMapper.toEntity(moduleRequest);
         Module createdModule = moduleService.createModule(module);
         return moduleMapper.toResponse(createdModule);
+    }
+
+    @PutMapping("/{id}")
+    public ModuleResponse updateModule(@PathVariable Long id, @RequestBody ModuleRequest moduleRequest) {
+        Module updatedModule = moduleService.updateModule(id, moduleRequest);
+        return moduleMapper.toResponse(updatedModule);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
+        moduleService.deleteModule(id);
+        return ResponseEntity.noContent().build();
     }
 }

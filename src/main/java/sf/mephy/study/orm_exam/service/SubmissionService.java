@@ -2,6 +2,7 @@ package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sf.mephy.study.orm_exam.dto.request.SubmissionRequest;
 import sf.mephy.study.orm_exam.entity.Assignment;
 import sf.mephy.study.orm_exam.entity.Submission;
 import sf.mephy.study.orm_exam.entity.User;
@@ -61,5 +62,42 @@ public class SubmissionService {
         submission.setSubmittedAt(LocalDateTime.now());
 
         return submissionRepository.save(submission);
+    }
+
+    public Submission updateSubmission(Long id, SubmissionRequest submissionRequest) {
+        Submission existingSubmission = submissionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Submission with id " + id + " not found"));
+
+        if (submissionRequest.getContent() != null) {
+            existingSubmission.setContent(submissionRequest.getContent());
+        }
+
+        if (submissionRequest.getScore() != null) {
+            existingSubmission.setScore(submissionRequest.getScore());
+        }
+
+        if (submissionRequest.getFeedback() != null) {
+            existingSubmission.setFeedback(submissionRequest.getFeedback());
+        }
+
+        if (submissionRequest.getAssignmentId() != null) {
+            Assignment assignment = assignmentRepository.findById(submissionRequest.getAssignmentId())
+                    .orElseThrow(() -> new EntityNotFoundException("Assignment with id " + submissionRequest.getAssignmentId() + " not found"));
+            existingSubmission.setAssignment(assignment);
+        }
+
+        if (submissionRequest.getStudentId() != null) {
+            User student = userRepository.findById(submissionRequest.getStudentId())
+                    .orElseThrow(() -> new EntityNotFoundException("User with id " + submissionRequest.getStudentId() + " not found"));
+            existingSubmission.setStudent(student);
+        }
+
+        return submissionRepository.save(existingSubmission);
+    }
+
+    public void deleteSubmission(Long id) {
+        Submission submission = submissionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Submission with id " + id + " not found"));
+        submissionRepository.delete(submission);
     }
 }

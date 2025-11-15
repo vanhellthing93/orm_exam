@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.LessonRequest;
 import sf.mephy.study.orm_exam.dto.response.LessonResponse;
@@ -36,5 +37,17 @@ public class LessonController {
         Lesson lesson = lessonMapper.toEntity(lessonRequest);
         Lesson createdLesson = lessonService.createLesson(lesson);
         return lessonMapper.toResponse(createdLesson);
+    }
+
+    @PutMapping("/{id}")
+    public LessonResponse updateLesson(@PathVariable Long id, @RequestBody LessonRequest lessonRequest) {
+        Lesson updatedLesson = lessonService.updateLesson(id, lessonRequest);
+        return lessonMapper.toResponse(updatedLesson);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
+        lessonService.deleteLesson(id);
+        return ResponseEntity.noContent().build();
     }
 }

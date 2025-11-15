@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.AnswerOptionRequest;
 import sf.mephy.study.orm_exam.dto.response.AnswerOptionResponse;
@@ -37,4 +38,17 @@ public class AnswerOptionController {
         AnswerOption createdAnswerOption = answerOptionService.createAnswerOption(answerOption);
         return answerOptionMapper.toResponse(createdAnswerOption);
     }
+
+    @PutMapping("/{id}")
+    public AnswerOptionResponse updateAnswerOption(@PathVariable Long id, @RequestBody AnswerOptionRequest answerOptionRequest) {
+        AnswerOption updatedAnswerOption = answerOptionService.updateAnswerOption(id, answerOptionRequest);
+        return answerOptionMapper.toResponse(updatedAnswerOption);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAnswerOption(@PathVariable Long id) {
+        answerOptionService.deleteAnswerOption(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

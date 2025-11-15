@@ -1,6 +1,7 @@
 package sf.mephy.study.orm_exam.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sf.mephy.study.orm_exam.dto.request.SubmissionContentRequest;
 import sf.mephy.study.orm_exam.dto.request.SubmissionRequest;
@@ -64,4 +65,15 @@ public class SubmissionController {
                 .collect(Collectors.toList());
     }
 
+    @PutMapping("/{id}")
+    public SubmissionResponse updateSubmission(@PathVariable Long id, @RequestBody SubmissionRequest submissionRequest) {
+        Submission updatedSubmission = submissionService.updateSubmission(id, submissionRequest);
+        return submissionMapper.toResponse(updatedSubmission);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSubmission(@PathVariable Long id) {
+        submissionService.deleteSubmission(id);
+        return ResponseEntity.noContent().build();
+    }
 }

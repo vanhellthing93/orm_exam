@@ -2,6 +2,7 @@ package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sf.mephy.study.orm_exam.dto.request.LessonRequest;
 import sf.mephy.study.orm_exam.entity.Lesson;
 import sf.mephy.study.orm_exam.entity.Module;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
@@ -36,4 +37,30 @@ public class LessonService {
         return lessonRepository.save(lesson);
     }
 
+    public Lesson updateLesson(Long id, LessonRequest lessonRequest) {
+        Lesson existingLesson = lessonRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Lesson with id " + id + " not found"));
+
+        if (lessonRequest.getTitle() != null) {
+            existingLesson.setTitle(lessonRequest.getTitle());
+        }
+
+        if (lessonRequest.getContent() != null) {
+            existingLesson.setContent(lessonRequest.getContent());
+        }
+
+        if (lessonRequest.getModuleId() != null) {
+            Module module = moduleRepository.findById(lessonRequest.getModuleId())
+                    .orElseThrow(() -> new EntityNotFoundException("Module with id " + lessonRequest.getModuleId() + " not found"));
+            existingLesson.setModule(module);
+        }
+
+        return lessonRepository.save(existingLesson);
+    }
+
+    public void deleteLesson(Long id) {
+        Lesson lesson = lessonRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Lesson with id " + id + " not found"));
+        lessonRepository.delete(lesson);
+    }
 }
