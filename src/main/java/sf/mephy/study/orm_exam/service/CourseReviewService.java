@@ -29,19 +29,24 @@ public class CourseReviewService {
     }
 
     public CourseReview createCourseReview(CourseReview courseReview) {
-        return courseReviewRepository.save(courseReview);
-    }
+        Long courseId = courseReview.getCourse().getId();
+        Long studentId = courseReview.getStudent().getId();
 
+        return createCourseReviewWithCourseIdAndStudentId(courseReview, courseId, studentId);
+    }
     public CourseReview createCourseReview(Long courseId, Long studentId, CourseReview courseReviewDetails) {
+        return createCourseReviewWithCourseIdAndStudentId(courseReviewDetails, courseId, studentId);
+    }
+    private CourseReview createCourseReviewWithCourseIdAndStudentId(CourseReview courseReview, Long courseId, Long studentId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new EntityNotFoundException("Course with id " + courseId + " not found"));
 
         User student = userRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + studentId + " not found"));
 
-        courseReviewDetails.setCourse(course);
-        courseReviewDetails.setStudent(student);
+        courseReview.setCourse(course);
+        courseReview.setStudent(student);
 
-        return courseReviewRepository.save(courseReviewDetails);
+        return courseReviewRepository.save(courseReview);
     }
 }

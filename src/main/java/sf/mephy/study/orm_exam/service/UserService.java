@@ -1,8 +1,10 @@
 package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import sf.mephy.study.orm_exam.entity.User;
+import sf.mephy.study.orm_exam.exception.DuplicateEntityException;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
 import sf.mephy.study.orm_exam.repository.UserRepository;
 
@@ -23,6 +25,10 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            throw new DuplicateEntityException("User with this email already exists.");
+        }
     }
 }

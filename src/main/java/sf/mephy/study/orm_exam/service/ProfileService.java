@@ -1,8 +1,11 @@
 package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import sf.mephy.study.orm_exam.entity.Profile;
+import sf.mephy.study.orm_exam.entity.User;
+import sf.mephy.study.orm_exam.exception.DuplicateEntityException;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
 import sf.mephy.study.orm_exam.repository.ProfileRepository;
 import sf.mephy.study.orm_exam.repository.UserRepository;
@@ -19,7 +22,18 @@ public class ProfileService {
     }
 
     public Profile createProfile(Profile profile) {
-        return profileRepository.save(profile);
+        Long userId = profile.getUser().getId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
+
+        profile.setUser(user);
+
+        try {
+            return profileRepository.save(profile);
+        } catch (DataIntegrityViolationException ex) {
+            throw new DuplicateEntityException("Profile for this user already exists.");
+        }
     }
 
     public Profile updateProfile(Long id, Profile profileDetails) {

@@ -1,8 +1,10 @@
 package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import sf.mephy.study.orm_exam.entity.Category;
+import sf.mephy.study.orm_exam.exception.DuplicateEntityException;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
 import sf.mephy.study.orm_exam.repository.CategoryRepository;
 
@@ -23,6 +25,10 @@ public class CategoryService {
     }
 
     public Category createCategory(Category category) {
-        return categoryRepository.save(category);
+        try {
+            return categoryRepository.save(category);
+        } catch (DataIntegrityViolationException ex) {
+            throw new DuplicateEntityException("Category with this name already exists.");
+        }
     }
 }

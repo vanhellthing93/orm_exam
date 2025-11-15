@@ -1,8 +1,10 @@
 package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import sf.mephy.study.orm_exam.entity.Tag;
+import sf.mephy.study.orm_exam.exception.DuplicateEntityException;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
 import sf.mephy.study.orm_exam.repository.TagRepository;
 
@@ -23,6 +25,10 @@ public class TagService {
     }
 
     public Tag createTag(Tag tag) {
-        return tagRepository.save(tag);
+        try {
+            return tagRepository.save(tag);
+        } catch (DataIntegrityViolationException ex) {
+            throw new DuplicateEntityException("Tag with this name already exists.");
+        }
     }
 }
