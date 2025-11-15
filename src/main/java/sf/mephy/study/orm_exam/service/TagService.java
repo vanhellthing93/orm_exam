@@ -1,0 +1,28 @@
+package sf.mephy.study.orm_exam.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import sf.mephy.study.orm_exam.entity.Tag;
+import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
+import sf.mephy.study.orm_exam.repository.TagRepository;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class TagService {
+    private final TagRepository tagRepository;
+
+    public List<Tag> getAllTags() {
+        return tagRepository.findAll();
+    }
+
+    public Tag getTagById(Long id) {
+        return tagRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tag with id " + id + " not found"));
+    }
+
+    public Tag createTag(Tag tag) {
+        return tagRepository.save(tag);
+    }
+}
