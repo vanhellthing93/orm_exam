@@ -7,15 +7,12 @@ databaseChangeLog:
             tableName: categories
             columns:
               - column:
-                  name: id
-                  valueNumeric: 1
-              - column:
                   name: name
                   value: "Category 1"
       rollback:
         - delete:
             tableName: categories
-            where: "id = 1"
+            where: "name = 'Category 1'"
 
   - changeSet:
       id: insert_sample_users
@@ -24,9 +21,6 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: email
                   value: "teacher@example.com"
@@ -40,9 +34,6 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
-                  name: id
-                  valueNumeric: 2
-              - column:
                   name: email
                   value: "student@example.com"
               - column:
@@ -54,7 +45,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: users
-            where: "id IN (1, 2)"
+            where: "email IN ('teacher@example.com', 'student@example.com')"
 
   - changeSet:
       id: insert_sample_courses
@@ -63,9 +54,6 @@ databaseChangeLog:
         - insert:
             tableName: courses
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: description
                   value: "Course description"
@@ -87,7 +75,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: courses
-            where: "id = 1"
+            where: "title = 'Course 1'"
 
   - changeSet:
       id: insert_sample_modules
@@ -96,9 +84,6 @@ databaseChangeLog:
         - insert:
             tableName: modules
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: order_index
                   valueNumeric: 1
@@ -111,7 +96,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: modules
-            where: "id = 1"
+            where: "title = 'Module 1'"
 
   - changeSet:
       id: insert_sample_lessons
@@ -120,9 +105,6 @@ databaseChangeLog:
         - insert:
             tableName: lessons
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: content
                   value: "Lesson content"
@@ -135,7 +117,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: lessons
-            where: "id = 1"
+            where: "title = 'Lesson 1'"
 
   - changeSet:
       id: insert_sample_quizzes
@@ -144,9 +126,6 @@ databaseChangeLog:
         - insert:
             tableName: quizzes
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: time_limit
                   valueNumeric: 60
@@ -159,7 +138,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: quizzes
-            where: "id = 1"
+            where: "title = 'Quiz 1'"
 
   - changeSet:
       id: insert_sample_questions
@@ -168,9 +147,6 @@ databaseChangeLog:
         - insert:
             tableName: questions
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: text
                   value: "Question text"
@@ -183,7 +159,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: questions
-            where: "id = 1"
+            where: "text = 'Question text'"
 
   - changeSet:
       id: insert_sample_answer_options
@@ -192,9 +168,6 @@ databaseChangeLog:
         - insert:
             tableName: answer_options
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: is_correct
                   valueBoolean: true
@@ -208,9 +181,6 @@ databaseChangeLog:
             tableName: answer_options
             columns:
               - column:
-                  name: id
-                  valueNumeric: 2
-              - column:
                   name: is_correct
                   valueBoolean: false
               - column:
@@ -222,7 +192,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: answer_options
-            where: "id IN (1, 2)"
+            where: "text IN ('Option 1', 'Option 2')"
 
   - changeSet:
       id: insert_sample_assignments
@@ -231,9 +201,6 @@ databaseChangeLog:
         - insert:
             tableName: assignments
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: description
                   value: "First assignment description"
@@ -252,7 +219,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: assignments
-            where: "id = 1"
+            where: "title = 'Assignment 1'"
 
   - changeSet:
       id: insert_sample_submissions
@@ -261,9 +228,6 @@ databaseChangeLog:
         - insert:
             tableName: submissions
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: content
                   value: "My submission"
@@ -285,7 +249,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: submissions
-            where: "id = 1"
+            where: "content = 'My submission'"
 
   - changeSet:
       id: insert_sample_quiz_submissions
@@ -294,9 +258,6 @@ databaseChangeLog:
         - insert:
             tableName: quiz_submissions
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: score
                   valueNumeric: 85
@@ -312,7 +273,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: quiz_submissions
-            where: "id = 1"
+            where: "score = 85 AND taken_at = '2025-11-15 13:00:00'"
 
   - changeSet:
       id: insert_sample_tags
@@ -322,15 +283,12 @@ databaseChangeLog:
             tableName: tags
             columns:
               - column:
-                  name: id
-                  valueNumeric: 1
-              - column:
                   name: name
                   value: "Tag1"
       rollback:
         - delete:
             tableName: tags
-            where: "id = 1"
+            where: "name = 'Tag1'"
 
   - changeSet:
       id: insert_sample_course_tag
@@ -358,9 +316,6 @@ databaseChangeLog:
             tableName: enrollments
             columns:
               - column:
-                  name: id
-                  valueNumeric: 1
-              - column:
                   name: enroll_date
                   valueDate: 2025-11-01T09:00:00
               - column:
@@ -375,7 +330,7 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: enrollments
-            where: "id = 1"
+            where: "enroll_date = '2025-11-01 09:00:00' AND status = 'ACTIVE'"
 
   - changeSet:
       id: insert_sample_profiles
@@ -384,9 +339,6 @@ databaseChangeLog:
         - insert:
             tableName: profiles
             columns:
-              - column:
-                  name: id
-                  valueNumeric: 1
               - column:
                   name: avatar_url
                   value: "http://example.com/avatar1.png"
@@ -402,4 +354,4 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: profiles
-            where: "id = 1"
+            where: "avatar_url = 'http://example.com/avatar1.png' AND bio = 'Profile bio'"
