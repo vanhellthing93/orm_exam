@@ -63,7 +63,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     public void testGetAllCategories() throws Exception {
-        mockMvc.perform(get("/api/categories"))
+        mockMvc.perform(get("/api/v1/categories"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", not(empty())))
                 .andExpect(jsonPath("$[0].name").value(existingCategory.getName()));
@@ -71,7 +71,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     public void testGetCategoryById() throws Exception {
-        mockMvc.perform(get("/api/categories/{id}", existingCategory.getId()))
+        mockMvc.perform(get("/api/v1/categories/{id}", existingCategory.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(existingCategory.getId()))
                 .andExpect(jsonPath("$.name").value(existingCategory.getName()));
@@ -83,7 +83,7 @@ public class CategoryControllerIntegrationTest {
         request.setName("New Category");
         String json = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(post("/api/categories")
+        mockMvc.perform(post("/api/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -97,7 +97,7 @@ public class CategoryControllerIntegrationTest {
         request.setName("Updated Name");
         String json = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(put("/api/categories/{id}", existingCategory.getId())
+        mockMvc.perform(put("/api/v1/categories/{id}", existingCategory.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -107,10 +107,10 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     public void testDeleteCategory() throws Exception {
-        mockMvc.perform(delete("/api/categories/{id}", existingCategory.getId()))
+        mockMvc.perform(delete("/api/v1/categories/{id}", existingCategory.getId()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/categories/{id}", existingCategory.getId()))
+        mockMvc.perform(get("/api/v1/categories/{id}", existingCategory.getId()))
                 .andExpect(status().isNotFound());
     }
 }

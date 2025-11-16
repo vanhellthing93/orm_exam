@@ -72,6 +72,16 @@ SPRING_PROFILES_ACTIVE=dev  # Активный профиль (по умолча
 ### Результат тестов:
 ![Tests.png](Tests.png)
 ### Развернуть приложение в Docker контейнере
+#### Клонируем репозиторий
+```shell
+git clone https://github.com/vanhellthing93/orm_exam
+```
+
+#### Заходим в папку
+```shell
+cd orm_exam
+```
+
 #### Собираем
 ```shell
 mvn clean install -P dev -DskipTests
@@ -80,6 +90,9 @@ mvn clean install -P dev -DskipTests
 ```shell
 docker-compose up -d
 ```
+
+#### Тестируем
+В качестве тестирования предлагается запустить коллекцию Postman, лежащую в корне проекта
 
 ## API Endpoints
 
