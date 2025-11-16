@@ -2,20 +2,26 @@ package sf.mephy.study.orm_exam.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sf.mephy.study.orm_exam.dto.request.QuizRequest;
-import sf.mephy.study.orm_exam.entity.Quiz;
+import sf.mephy.study.orm_exam.entity.*;
 import sf.mephy.study.orm_exam.entity.Module;
 import sf.mephy.study.orm_exam.exception.EntityNotFoundException;
-import sf.mephy.study.orm_exam.repository.ModuleRepository;
-import sf.mephy.study.orm_exam.repository.QuizRepository;
+import sf.mephy.study.orm_exam.repository.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class QuizService {
     private final QuizRepository quizRepository;
     private final ModuleRepository moduleRepository;
+    private final UserRepository userRepository;
+    private final QuestionRepository questionRepository;
+    private final AnswerOptionRepository answerOptionRepository;
+    private final QuizSubmissionRepository quizSubmissionRepository;
+
 
     public List<Quiz> getAllQuizzes() {
         return quizRepository.findAll();
@@ -63,5 +69,40 @@ public class QuizService {
         Quiz quiz = quizRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Quiz with id " + id + " not found"));
         quizRepository.delete(quiz);
+    }
+
+    @Transactional
+    public QuizSubmission takeQuiz(Long studentId, Long quizId, Map<Long, Long> answers) {
+        // Получаем студента и тест
+        User student = userRepository.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException("Student with id " + studentId + " not found"));
+
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new EntityNotFoundException("Quiz with id " + quizId + " not found"));
+
+        // Получаем вопросы теста
+        List<Question> questions = questionRepository.findAllByQuiz_Id(quizId);
+
+        // Проверяем ответы и подсчитываем баллы
+        int totalScore = 0;
+        for (Question question : questions) {
+            Long selectedOptionId = answers.get(question.getId());
+            if (selectedOptionId != null) {
+                AnswerOption selectedOption = answerOptionRepository.findById(selectedOptionId)
+                        .orElseThrow(() -> new EntityNotFoundException("AnswerOption with id " + selectedOptionId + " not found"));
+
+                if (selectedOption.getIsCorrect()) {
+                    totalScore += 1;
+                }
+            }
+        }
+
+        // Сохраняем результат теста
+        QuizSubmission quizSubmission = new QuizSubmission();
+        quizSubmission.setScore(totalScore);
+        quizSubmission.setQuiz(quiz);
+        quizSubmission.setStudent(student);
+
+        return quizSubmissionRepository.save(quizSubmission);
     }
 }

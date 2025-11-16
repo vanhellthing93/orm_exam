@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Testcontainers
 @SpringBootTest
 @ActiveProfiles("test")
-public class CourseIntegrationTest {
+public class CourseCrudIntegrationTest {
 
     @Container
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17.5")

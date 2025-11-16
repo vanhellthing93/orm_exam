@@ -71,7 +71,7 @@ databaseChangeLog:
                   valueNumeric: 1
               - column:
                   name: teacher_id
-                  valueNumeric: 2
+                  valueNumeric: 1
       rollback:
         - delete:
             tableName: courses
@@ -355,3 +355,29 @@ databaseChangeLog:
         - delete:
             tableName: profiles
             where: "avatar_url = 'http://example.com/avatar1.png' AND bio = 'Profile bio'"
+  - changeSet:
+      id: insert_sample_course_reviews
+      author: ivan_kosovskiy
+      changes:
+        - insert:
+            tableName: course_reviews
+            columns:
+              - column:
+                  name: comment
+                  value: "Отличный курс"
+              - column:
+                  name: created_at
+                  valueDate: 2025-11-01T09:00:00
+              - column:
+                  name: rating
+                  valueNumeric: 5
+              - column:
+                  name: course_id
+                  valueNumeric: 1
+              - column:
+                  name: student_id
+                  valueNumeric: 2
+      rollback:
+        - delete:
+            tableName: course_reviews
+            where: "comment = 'Отличный курс'"
