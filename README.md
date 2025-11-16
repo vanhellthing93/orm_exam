@@ -65,7 +65,7 @@ SPRING_PROFILES_ACTIVE=dev  # Активный профиль (по умолча
 * Полное отключение тестов
     * Для PowerShell:
   ```shell
-  mvn clean install -P prod "-Dmaven.test.skip=true"
+  mvn clean install -P dev "-Dmaven.test.skip=true"
   ```
 
 
@@ -74,7 +74,7 @@ SPRING_PROFILES_ACTIVE=dev  # Активный профиль (по умолча
 ### Развернуть приложение в Docker контейнере
 #### Собираем
 ```shell
-mvn clean install -P prod -DskipTests
+mvn clean install -P dev -DskipTests
 ```
 #### Разворачиваем
 ```shell
